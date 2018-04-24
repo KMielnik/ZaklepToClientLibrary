@@ -3,7 +3,7 @@ using ZaklepToClientLibrary.Models;
 
 namespace ZaklepToClientLibrary.DTO.OnCreate
 {
-    public class RestaurantOnCreateDTO
+    public class RestaurantOnCreateDto
     {
         public string Name { get; set; }
         public string Description { get; set; }

@@ -4,7 +4,7 @@ using ZaklepToClientLibrary.Models;
 
 namespace ZaklepToClientLibrary.DTO.OnUpdate
 {
-    public class RestaurantOnUpdateDTO
+    public class RestaurantOnUpdateDto
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

@@ -6,12 +6,12 @@ namespace ZaklepToClientLibrary.Services
 {
     public class ClientFactory
     {
-        private CustomerClient customerClient;
-        private EmployeeClient employeeClient;
-        private OwnerClient ownerClient;
-        private UnregisteredClient unregisteredClient;
+        private CustomerClient _customerClient;
+        private EmployeeClient _employeeClient;
+        private OwnerClient _ownerClient;
+        private UnregisteredClient _unregisteredClient;
 
-        private readonly HttpClient client;
+        private readonly HttpClient _client;
 
         /// <summary>
         /// Create factory which returns single instances of particuliar clients, you can use all of them at once.
@@ -22,7 +22,7 @@ namespace ZaklepToClientLibrary.Services
         /// </param>
         public ClientFactory(string apiServerAdress)
         {
-            client = new HttpClient
+            _client = new HttpClient
             {
                 BaseAddress = new Uri($"http://{apiServerAdress}/api/")
             };
@@ -53,30 +53,30 @@ namespace ZaklepToClientLibrary.Services
             return serverAdress;
         }
 
-        ~ClientFactory() => client.Dispose();
+        ~ClientFactory() => _client.Dispose();
 
         /// <summary>
         /// Get instance of CustomerClient
         /// </summary>
         public CustomerClient GetCustomerClient()
-            => customerClient ?? (customerClient = new CustomerClient(client));
+            => _customerClient ?? (_customerClient = new CustomerClient(_client));
 
         /// <summary>
         /// Get instance of EmployeeClient
         /// </summary>
         public EmployeeClient GetEmployeeClient()
-            => employeeClient ?? (employeeClient = new EmployeeClient(client));
+            => _employeeClient ?? (_employeeClient = new EmployeeClient(_client));
 
         /// <summary>
         /// Get instance of OwnerClient
         /// </summary>
         public OwnerClient GetOwnerClient()
-            => ownerClient ?? (ownerClient = new OwnerClient(client));
+            => _ownerClient ?? (_ownerClient = new OwnerClient(_client));
 
         /// <summary>
         /// Get instance of UnregisteredClient
         /// </summary>
         public UnregisteredClient GetUnregisteredClient()
-            => unregisteredClient ?? (unregisteredClient = new UnregisteredClient(client));
+            => _unregisteredClient ?? (_unregisteredClient = new UnregisteredClient(_client));
     }
 }

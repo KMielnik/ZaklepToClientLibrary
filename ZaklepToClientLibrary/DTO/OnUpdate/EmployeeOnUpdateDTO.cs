@@ -1,6 +1,6 @@
 ﻿namespace ZaklepToClientLibrary.DTO.OnUpdate
 {
-    public class EmployeeOnUpdateDTO
+    public class EmployeeOnUpdateDto
     {
         public string Login { get; set; }
         public string FirstName { get; set; }

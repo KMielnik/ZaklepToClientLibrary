@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Net;
 using System.Net.Http;
-using System.Security.Principal;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using ZaklepToClientLibrary.DTO;

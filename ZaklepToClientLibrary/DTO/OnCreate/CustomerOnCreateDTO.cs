@@ -1,6 +1,6 @@
 ﻿namespace ZaklepToClientLibrary.DTO.OnCreate
 {
-    public class CustomerOnCreateDTO
+    public class CustomerOnCreateDto
     {
         public string Login { get; set; }
         public string Password { get; set; }
