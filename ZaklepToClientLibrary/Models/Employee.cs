@@ -26,6 +26,7 @@ namespace ZaklepToClientLibrary.Models
             Email = email;
             Phone = phone;
             CreatedAt = DateTime.UtcNow;
+            Restaurant = restaurant;
         }
     }
 }
