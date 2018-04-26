@@ -13,5 +13,20 @@ namespace ZaklepToClientLibrary.Models
         public string Phone { get; set; }
         public DateTime CreatedAt { get; set; }
         public Restaurant Restaurant { get; set; }
+
+        public Owner()
+        {
+        }
+
+        public Owner(string login, string firstrName, string lastName, string email, string phone, DateTime createdAt, Restaurant restaurant)
+        {
+            Login = login;
+            firstrName = FirstName;
+            LastName = lastName;
+            Email = email;
+            Phone = phone;
+            CreatedAt = createdAt;
+            Restaurant = restaurant;
+        }
     }
 }
