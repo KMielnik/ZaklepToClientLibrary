@@ -13,5 +13,19 @@ namespace ZaklepToClientLibrary.Models
         public string Phone { get; set; }
         public DateTime CreatedAt { get; set; }
         public Restaurant Restaurant { get; set; }
+
+        public Employee()
+        {
+        }
+
+        public Employee(string login, string firstrName, string lastName, string email, string phone, DateTime createdAt, Restaurant restaurant)
+        {
+            Login = login;
+            FirstName = firstrName;
+            LastName = lastName;
+            Email = email;
+            Phone = phone;
+            CreatedAt = DateTime.UtcNow;
+        }
     }
 }
