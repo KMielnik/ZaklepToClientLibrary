@@ -12,5 +12,22 @@ namespace ZaklepToClientLibrary.Models
         public Customer Customer { get; set; }
         public bool IsConfirmed { get; set; }
         public bool IsActive { get; set; }
+
+        public Reservation()
+        {
+        }
+
+        public Reservation(Guid id, Restaurant restaurant, DateTime dateStart, DateTime dateEnd, Table table,
+           Customer customer, bool isConfirmed, bool isActive)
+        {
+            Id = id;
+            Restaurant = restaurant;
+            DateStart = dateStart;
+            DateEnd = dateEnd;
+            Table = table;
+            Customer = customer;
+            IsConfirmed = isConfirmed;
+            IsActive = isActive;
+        }
     }
 }
