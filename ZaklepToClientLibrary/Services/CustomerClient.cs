@@ -28,7 +28,6 @@ namespace ZaklepToClientLibrary.Services
         /// Returns customer account.
         /// </summary>
         /// <exception cref="ErrorCodes.UserNotLoggedIn"></exception>
-        /// <returns>Customer</returns>
         public async Task<Customer> GetCustommerAccount(string login)
         {
             var response = await Client.AuthenticatedGetAsync("customers",Token);
@@ -47,6 +46,20 @@ namespace ZaklepToClientLibrary.Services
             return customer;
         }
 
+        /// <summary>
+        /// Returns customers most frequent restaurants.
+        /// </summary>
+        /// <exception cref="ErrorCodes.UserNotLoggedIn"></exception>
+        public async Task<IEnumerable<Restaurant>> GetMostFrequentRestaurants()
+        {
+            var login = await Client.AuthenticatedGetAsync("customers/getmyaccount", Token);
+            var response = await Client.AuthenticatedGetAsync($"api/customers/{login}/toprestaurants", Token);
+            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                throw new ClientException(ErrorCodes.UserNotLoggedIn);
+            var responseJson = await response.Content.ReadAsStringAsync();
+            var mostFrequentRestaurants = JsonConvert.DeserializeObject<IEnumerable<Restaurant>>(responseJson);
+            return mostFrequentRestaurants;
 
+        }
     }
 }
