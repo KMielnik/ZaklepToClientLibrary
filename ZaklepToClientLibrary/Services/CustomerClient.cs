@@ -57,7 +57,7 @@ namespace ZaklepToClientLibrary.Services
         /// <retruns>List of customers mos frequent restaurants.</retruns>
         public async Task<IEnumerable<Restaurant>> GetMostFrequentRestaurants()
         {
-            var login = await base.GetAuthorizedUserLogin();
+            var login = base.GetAuthorizedUserLogin();
             var response = await Client.AuthenticatedGetAsync($"customers/{login}/toprestaurants", Token);
             if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                 throw new ClientException(ErrorCodes.UserNotLoggedIn);
@@ -105,10 +105,10 @@ namespace ZaklepToClientLibrary.Services
         /// <param name="email"></param>
         /// <param name="phone"></param>
         /// <returns></returns>
-        public async Task UpdateCustomer(string login, string firstName, string lastName,
+        public async Task UpdateCustomer(string firstName, string lastName,
             string email, string phone)
         {
-            var login = await base.GetAuthorizedUserLogin();
+            var login = base.GetAuthorizedUserLogin();
             var updateCustomer = new CustomerOnUpdateDto()
             {
                 FirstName = firstName,
@@ -117,7 +117,7 @@ namespace ZaklepToClientLibrary.Services
                 Phone = phone
             };
 
-            var registerCustomerJson = JsonConvert.SerializeObject(registerCustomer);
+            var registerCustomerJson = JsonConvert.SerializeObject(updateCustomer);
             var response = await Client.AuthenticatedPostJsonAsync($"cusomters/{login}/update",
                 new StringContent(registerCustomerJson), Token);
 
@@ -132,7 +132,7 @@ namespace ZaklepToClientLibrary.Services
         /// <returns></returns>
         public async Task ChangeCustomersPassword(string oldPassword, string newPassword)
         {
-            var login = await base.GetAuthorizedUserLogin();
+            var login = base.GetAuthorizedUserLogin();
             var changedPassword = new PasswordChange()
             {
                 Login = login,
@@ -143,6 +143,18 @@ namespace ZaklepToClientLibrary.Services
             var changedPasswordJson = JsonConvert.SerializeObject(changedPassword);
             var response = await Client.AuthenticatedPostJsonAsync($"customers/{login}/changepassword", 
                 new StringContent(changedPasswordJson), Token);
+
+            //TODO exceptions
+        }
+
+
+        /// <summary>
+        /// Removes customers account.
+        /// </summary>
+        public async Task RemoveCustomer()
+        {
+            var login = base.GetAuthorizedUserLogin();
+            var response = await Client.AuthenticatedGetAsync($"customers/{login}/remove", Token);
 
             //TODO exceptions
         }
