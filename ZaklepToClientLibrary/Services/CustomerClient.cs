@@ -31,7 +31,7 @@ namespace ZaklepToClientLibrary.Services
         /// Returns customer account.
         /// </summary>
         /// <exception cref="ErrorCodes.UserNotLoggedIn"></exception>
-        /// <returns>Customers account.</returns>
+        /// <returns>Customers account</returns>
         public async Task<Customer> GetCustommerAccount(string login)
         {
             var response = await Client.AuthenticatedGetAsync("customers",Token);
@@ -48,6 +48,19 @@ namespace ZaklepToClientLibrary.Services
             var responseJson = await response.Content.ReadAsStringAsync();
             var customer = JsonConvert.DeserializeObject<Customer>(responseJson);
             return customer;
+        }
+
+
+        /// <summary>
+        /// Returns all customers
+        /// </summary>
+        /// <returns>All customers</returns>
+        public async Task<IEnumerable<Customer>> GetAllCustomers()
+        {
+            var response = await Client.AuthenticatedGetAsync("$customers",Token);
+            var responseJson = await response.Content.ReadAsStringAsync();
+            var allCustomers = JsonConvert.DeserializeObject<IEnumerable<Customer>>(responseJson);
+            return allCustomers;
         }
 
         /// <summary>
