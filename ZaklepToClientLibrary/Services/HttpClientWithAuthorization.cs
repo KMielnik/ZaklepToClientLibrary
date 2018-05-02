@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -66,6 +67,16 @@ namespace ZaklepToClientLibrary.Services
             var timeSpan = dateTime - DateTime.UtcNow;
             await Task.Delay(timeSpan);
             Logout();
+        }
+
+        /// <summary>
+        /// Returns login from actually logged in user
+        /// </summary>
+        /// <returns>Users login</returns>
+        protected string GetAuthorizedUserLogin()
+        {
+            var jwt = new JwtSecurityTokenHandler().ReadJwtToken(Token);
+            return jwt.Id;
         }
     }
 }
