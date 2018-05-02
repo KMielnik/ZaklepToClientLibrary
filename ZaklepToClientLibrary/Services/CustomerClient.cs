@@ -24,13 +24,14 @@ namespace ZaklepToClientLibrary.Services
         /// <param name="password"></param>
         /// <exception cref="ErrorCodes.InvalidLoginCredentials"></exception>
         public async Task CustomerLogin(string login, string password)
-            => await base.LoginAsync(login, password, "api/customers/login");
+            => await base.LoginAsync(login, password, "customers/login");
 
 
         /// <summary>
         /// Returns customer account.
         /// </summary>
         /// <exception cref="ErrorCodes.UserNotLoggedIn"></exception>
+        /// <returns>Customers account.</returns>
         public async Task<Customer> GetCustommerAccount(string login)
         {
             var response = await Client.AuthenticatedGetAsync("customers",Token);
@@ -53,10 +54,10 @@ namespace ZaklepToClientLibrary.Services
         /// Returns customers most frequent restaurants.
         /// </summary>
         /// <exception cref="ErrorCodes.UserNotLoggedIn"></exception>
+        /// <retruns>List of customers mos frequent restaurants.</retruns>
         public async Task<IEnumerable<Restaurant>> GetMostFrequentRestaurants()
         {
-            var loginJson = await Client.AuthenticatedGetAsync("customers/getmyaccount", Token); //it will be changed
-            var login = await loginJson.Content.ReadAsStringAsync(); //it will be changed
+            var login = await base.GetAuthorizedUserLogin();
             var response = await Client.AuthenticatedGetAsync($"customers/{login}/toprestaurants", Token);
             if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                 throw new ClientException(ErrorCodes.UserNotLoggedIn);
@@ -99,7 +100,6 @@ namespace ZaklepToClientLibrary.Services
         /// <summary>
         /// Update customer account.
         /// </summary>
-        /// <param name="login"></param>
         /// <param name="firstName"></param>
         /// <param name="lastName"></param>
         /// <param name="email"></param>
@@ -108,8 +108,8 @@ namespace ZaklepToClientLibrary.Services
         public async Task UpdateCustomer(string login, string firstName, string lastName,
             string email, string phone)
         {
-
-            var registerCustomer = new CustomerOnUpdateDto()
+            var login = await base.GetAuthorizedUserLogin();
+            var updateCustomer = new CustomerOnUpdateDto()
             {
                 FirstName = firstName,
                 LastName = lastName,
@@ -127,12 +127,12 @@ namespace ZaklepToClientLibrary.Services
         /// <summary>
         /// Change customers password.
         /// </summary>
-        /// <param name="login"></param>
         /// <param name="oldPassword"></param>
         /// <param name="newPassword"></param>
         /// <returns></returns>
-        public async Task ChangeCustomersPassword(string login, string oldPassword, string newPassword)
+        public async Task ChangeCustomersPassword(string oldPassword, string newPassword)
         {
+            var login = await base.GetAuthorizedUserLogin();
             var changedPassword = new PasswordChange()
             {
                 Login = login,
