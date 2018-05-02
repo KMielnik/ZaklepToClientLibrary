@@ -5,6 +5,8 @@ using ZaklepToClientLibrary.Extensions;
 using ZaklepToClientLibrary.Models;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
+using ZaklepToClientLibrary.DTO.OnCreate;
+using ZaklepToClientLibrary.DTO.OnUpdate;
 
 namespace ZaklepToClientLibrary.Services
 {
@@ -53,13 +55,72 @@ namespace ZaklepToClientLibrary.Services
         public async Task<IEnumerable<Restaurant>> GetMostFrequentRestaurants()
         {
             var login = await Client.AuthenticatedGetAsync("customers/getmyaccount", Token);
-            var response = await Client.AuthenticatedGetAsync($"api/customers/{login}/toprestaurants", Token);
+            var response = await Client.AuthenticatedGetAsync($"customers/{login}/toprestaurants", Token);
             if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                 throw new ClientException(ErrorCodes.UserNotLoggedIn);
             var responseJson = await response.Content.ReadAsStringAsync();
             var mostFrequentRestaurants = JsonConvert.DeserializeObject<IEnumerable<Restaurant>>(responseJson);
             return mostFrequentRestaurants;
 
+        }
+
+        /// <summary>
+        /// Registers new customer.
+        /// </summary>
+        /// <param name="login"></param>
+        /// <param name="password"></param>
+        /// <param name="firstName"></param>
+        /// <param name="lastName"></param>
+        /// <param name="email"></param>
+        /// <param name="phone"></param>
+        public async Task RegisterCustomer(string login, string password, string firstName, string lastName,
+            string email, string phone)
+        {
+            var registerCustomer = new CustomerOnCreateDto()
+            {
+                Login = login,
+                Password = password,
+                FirstName = firstName,
+                LastName = lastName,
+                Email = email,
+                Phone = phone
+            };
+
+            var registerCustomerJson = JsonConvert.SerializeObject(registerCustomer);
+            var response = await Client.AuthenticatedPostJsonAsync("cusomters/register",
+                new StringContent(registerCustomerJson), Token);
+
+            //TODO exceptions
+        }
+
+
+        /// <summary>
+        /// Update customer account.
+        /// </summary>
+        /// <param name="login"></param>
+        /// <param name="firstName"></param>
+        /// <param name="lastName"></param>
+        /// <param name="email"></param>
+        /// <param name="phone"></param>
+        /// <returns></returns>
+        public async Task UpdateCustomer(string login, string firstName, string lastName,
+            string email, string phone)
+        {
+
+            var registerCustomer = new CustomerOnUpdateDto()
+            {
+                Login = login,
+                FirstName = firstName,
+                LastName = lastName,
+                Email = email,
+                Phone = phone
+            };
+
+            var registerCustomerJson = JsonConvert.SerializeObject(registerCustomer);
+            var response = await Client.AuthenticatedPostJsonAsync("cusomters/update",
+                new StringContent(registerCustomerJson), Token);
+
+            //TODO exceptions
         }
     }
 }
