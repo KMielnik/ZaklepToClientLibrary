@@ -1,5 +1,6 @@
 ﻿using System.Net.Http;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using ZaklepToClientLibrary.Exceptions;
 using ZaklepToClientLibrary.Extensions;
 using ZaklepToClientLibrary.Models;
@@ -54,7 +55,8 @@ namespace ZaklepToClientLibrary.Services
         /// <exception cref="ErrorCodes.UserNotLoggedIn"></exception>
         public async Task<IEnumerable<Restaurant>> GetMostFrequentRestaurants()
         {
-            var login = await Client.AuthenticatedGetAsync("customers/getmyaccount", Token);
+            var loginJson = await Client.AuthenticatedGetAsync("customers/getmyaccount", Token); //it will be changed
+            var login = await loginJson.Content.ReadAsStringAsync(); //it will be changed
             var response = await Client.AuthenticatedGetAsync($"customers/{login}/toprestaurants", Token);
             if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                 throw new ClientException(ErrorCodes.UserNotLoggedIn);
@@ -109,7 +111,6 @@ namespace ZaklepToClientLibrary.Services
 
             var registerCustomer = new CustomerOnUpdateDto()
             {
-                Login = login,
                 FirstName = firstName,
                 LastName = lastName,
                 Email = email,
@@ -117,8 +118,31 @@ namespace ZaklepToClientLibrary.Services
             };
 
             var registerCustomerJson = JsonConvert.SerializeObject(registerCustomer);
-            var response = await Client.AuthenticatedPostJsonAsync("cusomters/update",
+            var response = await Client.AuthenticatedPostJsonAsync($"cusomters/{login}/update",
                 new StringContent(registerCustomerJson), Token);
+
+            //TODO exceptions
+        }
+
+        /// <summary>
+        /// Change customers password.
+        /// </summary>
+        /// <param name="login"></param>
+        /// <param name="oldPassword"></param>
+        /// <param name="newPassword"></param>
+        /// <returns></returns>
+        public async Task ChangeCustomersPassword(string login, string oldPassword, string newPassword)
+        {
+            var changedPassword = new PasswordChange()
+            {
+                Login = login,
+                OldPassword = oldPassword,
+                NewPassword = newPassword
+            };
+
+            var changedPasswordJson = JsonConvert.SerializeObject(changedPassword);
+            var response = await Client.AuthenticatedPostJsonAsync($"customers/{login}/changepassword", 
+                new StringContent(changedPasswordJson), Token);
 
             //TODO exceptions
         }
