@@ -61,8 +61,9 @@ namespace ZaklepToClientLibrary.Services
         /// <param name="lastName"></param>
         /// <param name="email"></param>
         /// <param name="phone"></param>
+        /// <param name="restaurant"></param>
         public async Task RegisterEmplyeer(string login, string password, string firstName, string lastName,
-            string email, string phone)
+            string email, string phone, Restaurant restaurant)
         {
             var registerEmployee = new EmployeeOnCreateDto()
             {
@@ -71,7 +72,8 @@ namespace ZaklepToClientLibrary.Services
                 FirstName = firstName,
                 LastName = lastName,
                 Email = email,
-                Phone = phone
+                Phone = phone,
+                Restaurant = restaurant
             };
 
             var registerEmployeeJson = JsonConvert.SerializeObject(registerEmployee);
