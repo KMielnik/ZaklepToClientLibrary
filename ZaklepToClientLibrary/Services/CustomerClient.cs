@@ -57,7 +57,7 @@ namespace ZaklepToClientLibrary.Services
         /// <returns>All customers</returns>
         public async Task<IEnumerable<Customer>> GetAllCustomers()
         {
-            var response = await Client.AuthenticatedGetAsync("$customers",Token);
+            var response = await Client.AuthenticatedGetAsync("customers",Token);
             var responseJson = await response.Content.ReadAsStringAsync();
             var allCustomers = JsonConvert.DeserializeObject<IEnumerable<Customer>>(responseJson);
             return allCustomers;
@@ -130,9 +130,9 @@ namespace ZaklepToClientLibrary.Services
                 Phone = phone
             };
 
-            var registerCustomerJson = JsonConvert.SerializeObject(updateCustomer);
+            var updateCustomerJson = JsonConvert.SerializeObject(updateCustomer);
             var response = await Client.AuthenticatedPostJsonAsync($"cusomters/{login}/update",
-                new StringContent(registerCustomerJson), Token);
+                new StringContent(updateCustomerJson), Token);
 
             //TODO exceptions
         }
